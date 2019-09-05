@@ -1,16 +1,10 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <router-view />
 </template>
 
 <style lang="scss">
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -27,3 +21,36 @@
   }
 }
 </style>
+
+<script>
+import firebase from 'firebase';
+
+export default {
+  beforeCreate() {
+    // console.log('this.$router', this.$router)
+    this.$router.beforeEach((to, from, next) => {
+      // console.log('firebase', firebase);
+      const { currentUser } = firebase.auth();
+      console.log('currentUser', currentUser);
+      const withAuth = to.matched.some(record => record.meta.auth);
+      if (withAuth && !currentUser) {
+        next('login');
+      }
+      next();
+    });
+
+    firebase.auth().onAuthStateChanged((user) => {
+      console.log('user', user);
+      console.log('router.path', this.$router.path);
+      if (user && this.$router.path === '/login') {
+        // User is signed in.
+        this.$router.push('/');
+        console.log('user', user);
+      } else if (!user && this.$router.path !== '/login') {
+        this.$router.push('/login');
+        // No user is signed in.
+      }
+    });
+  },
+};
+</script>
