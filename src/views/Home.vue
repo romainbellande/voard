@@ -1,19 +1,35 @@
 <template>
   <div class="page-container">
     <md-app>
-      <md-app-toolbar class="md-primary" md-elevation="0">
-        <md-button class="md-icon-button" @click="toggleMenu" v-if="!menuVisible">
+      <md-app-toolbar
+        class="md-primary"
+        md-elevation="0"
+      >
+        <md-button
+          v-if="!menuVisible"
+          class="md-icon-button"
+          @click="toggleMenu"
+        >
           <md-icon>menu</md-icon>
         </md-button>
         <span class="md-title">My Title</span>
       </md-app-toolbar>
 
-      <md-app-drawer :md-active.sync="menuVisible" md-persistent="mini">
-        <md-toolbar class="md-transparent" md-elevation="0">
+      <md-app-drawer
+        :md-active.sync="menuVisible"
+        md-persistent="mini"
+      >
+        <md-toolbar
+          class="md-transparent"
+          md-elevation="0"
+        >
           <span>Navigation</span>
 
           <div class="md-toolbar-section-end">
-            <md-button class="md-icon-button md-dense" @click="toggleMenu">
+            <md-button
+              class="md-icon-button md-dense"
+              @click="toggleMenu"
+            >
               <md-icon>keyboard_arrow_left</md-icon>
             </md-button>
           </div>
@@ -45,7 +61,7 @@
       </md-app-drawer>
 
       <md-app-content>
-        <router-view></router-view>
+        <router-view />
       </md-app-content>
     </md-app>
   </div>
@@ -66,7 +82,7 @@
 
 <script>
 export default {
-  name: 'home',
+  name: 'Home',
   data: () => ({
     menuVisible: true,
   }),

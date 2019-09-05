@@ -1,9 +1,15 @@
 <template>
   <div>
-    <form novalidate class="md-layout" @submit.prevent="validateUser">
+    <form
+      novalidate
+      class="md-layout"
+      @submit.prevent="validateUser"
+    >
       <md-card class="md-layout-item md-size-50 md-small-size-100">
         <md-card-header>
-          <div class="md-title">Equipment</div>
+          <div class="md-title">
+            Equipment
+          </div>
         </md-card-header>
 
         <md-card-content>
@@ -11,40 +17,85 @@
             <div class="md-layout-item md-small-size-100">
               <md-field :class="getValidationClass('name')">
                 <label for="name">Name</label>
-                <md-input name="name" id="name" v-model="form.name" :disabled="sending" />
-                <span class="md-error" v-if="!$v.form.name.required">The name is required</span>
-                <span class="md-error" v-else-if="!$v.form.name.minlength">Invalid name</span>
+                <md-input
+                  id="name"
+                  v-model="form.name"
+                  name="name"
+                  :disabled="sending"
+                />
+                <span
+                  v-if="!$v.form.name.required"
+                  class="md-error"
+                >The name is required</span>
+                <span
+                  v-else-if="!$v.form.name.minlength"
+                  class="md-error"
+                >Invalid name</span>
               </md-field>
             </div>
 
             <div class="md-layout-item md-small-size-100">
               <md-field :class="getValidationClass('price')">
                 <label for="price">Price</label>
-                <md-input name="price" id="price" v-model="form.price" :disabled="sending" type="number" />
-                <span class="md-error" v-if="!$v.form.price.required">The price is required</span>
-                <span class="md-error" v-else-if="!$v.form.price.minlength">Invalid price</span>
+                <md-input
+                  id="price"
+                  v-model="form.price"
+                  name="price"
+                  :disabled="sending"
+                  type="number"
+                />
+                <span
+                  v-if="!$v.form.price.required"
+                  class="md-error"
+                >The price is required</span>
+                <span
+                  v-else-if="!$v.form.price.minlength"
+                  class="md-error"
+                >Invalid price</span>
               </md-field>
             </div>
           </div>
 
-            <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('shopLink')">
-                <label for="shopLink">Shop link</label>
-                <md-input id="shopLink" name="shopLink" v-model="form.shopLink" :disabled="sending" />
-                <span class="md-error" v-if="!$v.form.shopLink.required">The shop link is required</span>
-                <span class="md-error" v-else-if="!$v.form.shopLink.maxlength">Invalid shop link</span>
-              </md-field>
-            </div>
+          <div class="md-layout-item md-small-size-100">
+            <md-field :class="getValidationClass('shopLink')">
+              <label for="shopLink">Shop link</label>
+              <md-input
+                id="shopLink"
+                v-model="form.shopLink"
+                name="shopLink"
+                :disabled="sending"
+              />
+              <span
+                v-if="!$v.form.shopLink.required"
+                class="md-error"
+              >The shop link is required</span>
+              <span
+                v-else-if="!$v.form.shopLink.maxlength"
+                class="md-error"
+              >Invalid shop link</span>
+            </md-field>
+          </div>
         </md-card-content>
 
-        <md-progress-bar md-mode="indeterminate" v-if="sending" />
+        <md-progress-bar
+          v-if="sending"
+          md-mode="indeterminate"
+        />
 
         <md-card-actions>
-          <md-button type="submit" class="md-primary" :disabled="sending">Submit equipment</md-button>
+          <md-button
+            type="submit"
+            class="md-primary"
+            :disabled="sending"
+          >
+            Submit equipment
+          </md-button>
         </md-card-actions>
       </md-card>
 
-      <md-snackbar :md-active.sync="userSaved">The equipment {{ lastEquipment && lastEquipment.name }} was saved with success!</md-snackbar>
+      <md-snackbar :md-active.sync="userSaved">
+        The equipment {{ lastEquipment && lastEquipment.name }} was saved with success!
+      </md-snackbar>
     </form>
   </div>
 </template>
@@ -54,8 +105,8 @@ import { validationMixin } from 'vuelidate';
 import {
   required,
   minLength,
-  maxLength,
 } from 'vuelidate/lib/validators';
+import firebase from 'firebase';
 
 export default {
   mixins: [validationMixin],
@@ -69,6 +120,12 @@ export default {
     sending: false,
     lastEquipment: null,
   }),
+  created() {
+    const db = firebase.firestore();
+    const equipmentRef = db.collection('equipment');
+    this.source = equipmentRef;
+    this.$store.dispatch('setEquipmentRef', this.source);
+  },
   validations: {
     form: {
       name: {
@@ -104,19 +161,23 @@ export default {
       this.sending = true;
 
       // Instead of this timeout, here you can call your API
-      window.setTimeout(() => {
-        this.userSaved = true;
-        this.sending = false;
-        const { name, price, shopLink } = this.form;
-        console.log('hello');
-        this.lastEquipment = {
-          name,
-          price,
-          shopLink,
-        };
-        console.log('this.lastEquipment', this.lastEquipment);
-        this.clearForm();
-      }, 10);
+      this.userSaved = true;
+      this.sending = false;
+      const { name, price, shopLink } = this.form;
+      this.lastEquipment = {
+        name,
+        price,
+        shopLink,
+      };
+      // this.$store.commit('addEquipment', this.lastEquipment);
+      this.source.add({
+        name,
+        price: parseFloat(price),
+        shopLink,
+        status: 'IN_VALiDATION', // IN_VALiDATION, VALIDATED, ORDERED, RECEIVED
+        userId: this.$store.state.user.uid,
+      });
+      this.clearForm();
     },
     validateUser() {
       this.$v.$touch();

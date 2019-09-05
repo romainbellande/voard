@@ -1,6 +1,6 @@
 <template>
   <div>
-    <equipment-form></equipment-form>
+    <equipment-form />
   </div>
 </template>
 

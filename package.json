@@ -9,7 +9,8 @@
     "fix": "vue-cli-service lint --fix",
     "test:e2e": "vue-cli-service test:e2e",
     "test:unit": "vue-cli-service test:unit",
-    "fb:serve": "firebase serve"
+    "fb:serve": "firebase serve",
+    "fb:deploy": "firebase deploy"
   },
   "dependencies": {
     "core-js": "^2.6.5",
@@ -21,7 +22,8 @@
     "vue-material": "^1.0.0-beta-11",
     "vue-router": "^3.0.3",
     "vuelidate": "^0.7.4",
-    "vuex": "^3.0.1"
+    "vuex": "^3.1.1",
+    "vuexfire": "^3.1.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.11.0",
@@ -36,6 +38,7 @@
     "babel-eslint": "^10.0.1",
     "babel-jest": "^23.6.0",
     "eslint": "^5.16.0",
+    "eslint-config-prettier": "^6.2.0",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-vue": "^5.0.0",
     "node-sass": "^4.9.0",

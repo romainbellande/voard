@@ -30,25 +30,24 @@ export default {
     // console.log('this.$router', this.$router)
     this.$router.beforeEach((to, from, next) => {
       // console.log('firebase', firebase);
-      const { currentUser } = firebase.auth();
-      console.log('currentUser', currentUser);
+      const { user } = this.$store.state;
       const withAuth = to.matched.some(record => record.meta.auth);
-      if (withAuth && !currentUser) {
+      if (withAuth && !user) {
         next('login');
       }
       next();
     });
 
     firebase.auth().onAuthStateChanged((user) => {
+      this.$store.commit('setUser', user);
       console.log('user', user);
       console.log('router.path', this.$router.path);
       if (user && this.$router.path === '/login') {
         // User is signed in.
         this.$router.push('/');
-        console.log('user', user);
       } else if (!user && this.$router.path !== '/login') {
-        this.$router.push('/login');
         // No user is signed in.
+        this.$router.push('/login');
       }
     });
   },
