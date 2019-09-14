@@ -13,10 +13,29 @@ service cloud.firestore {
       allow read, write: if signedInOrPublic();
     }
 
-    match /equipment {
+    match /equipments {
       allow read, write: if signedInOrPublic();
 
       match /{equipment} {
+        allow read: if isOwner();
+        allow write: if signedInOrPublic();
+      }
+    }
+
+    match /roles {
+      allow read: if true
+      allow write: if false
+    }
+
+    match /permissions {
+      allow read: if true
+      allow write: if false
+    }
+
+    match /users {
+      allow read, write: if signedInOrPublic();
+
+      match /{user} {
         allow read: if isOwner();
         allow write: if signedInOrPublic();
       }

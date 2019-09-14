@@ -6,11 +6,13 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
+    "fb:deploy": "firebase deploy",
+    "fb:emulate": "export GOOGLE_APPLICATION_CREDENTIALS=\"${PWD}/credentials/admin.json\" && firebase emulators:start",
+    "fb:serve": "GOOGLE_APPLICATION_CREDENTIALS=\"${PWD}/credentials/admin.json\" firebase serve",
     "fix": "vue-cli-service lint --fix",
     "test:e2e": "vue-cli-service test:e2e",
     "test:unit": "vue-cli-service test:unit",
-    "fb:serve": "firebase serve",
-    "fb:deploy": "firebase deploy"
+    "ui": "vue ui"
   },
   "dependencies": {
     "core-js": "^2.6.5",
@@ -22,6 +24,7 @@
     "vue-material": "^1.0.0-beta-11",
     "vue-router": "^3.0.3",
     "vuelidate": "^0.7.4",
+    "vuetify": "^2.0.0",
     "vuex": "^3.1.1",
     "vuexfire": "^3.1.2"
   },
@@ -43,7 +46,10 @@
     "eslint-plugin-vue": "^5.0.0",
     "node-sass": "^4.9.0",
     "prettier": "^1.18.2",
+    "sass": "^1.17.4",
     "sass-loader": "^7.1.0",
-    "vue-template-compiler": "^2.6.10"
+    "vue-cli-plugin-vuetify": "^0.6.3",
+    "vue-template-compiler": "^2.6.10",
+    "vuetify-loader": "^1.2.2"
   }
 }

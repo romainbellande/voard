@@ -3,7 +3,7 @@
     <form
       novalidate
       class="md-layout"
-      @submit.prevent="validateUser"
+      @submit.prevent="validateEquipment"
     >
       <md-card class="md-layout-item md-size-50 md-small-size-100">
         <md-card-header>
@@ -93,7 +93,7 @@
         </md-card-actions>
       </md-card>
 
-      <md-snackbar :md-active.sync="userSaved">
+      <md-snackbar :md-active.sync="equipmentSaved">
         The equipment {{ lastEquipment && lastEquipment.name }} was saved with success!
       </md-snackbar>
     </form>
@@ -108,6 +108,8 @@ import {
 } from 'vuelidate/lib/validators';
 import firebase from 'firebase';
 
+import { collections, actions } from '@/store';
+
 export default {
   mixins: [validationMixin],
   data: () => ({
@@ -116,15 +118,15 @@ export default {
       price: null,
       shopLink: null,
     },
-    userSaved: false,
+    equipmentSaved: false,
     sending: false,
     lastEquipment: null,
   }),
   created() {
     const db = firebase.firestore();
-    const equipmentRef = db.collection('equipment');
+    const equipmentRef = db.collection(collections.EQUIPMENTS);
     this.source = equipmentRef;
-    this.$store.dispatch('setEquipmentRef', this.source);
+    this.$store.dispatch(actions.setEquipmentsRef, this.source);
   },
   validations: {
     form: {
@@ -157,11 +159,11 @@ export default {
       this.form.price = null;
       this.form.shopLink = null;
     },
-    saveUser() {
+    saveEquipment() {
       this.sending = true;
 
       // Instead of this timeout, here you can call your API
-      this.userSaved = true;
+      this.equipmentSaved = true;
       this.sending = false;
       const { name, price, shopLink } = this.form;
       this.lastEquipment = {
@@ -169,7 +171,6 @@ export default {
         price,
         shopLink,
       };
-      // this.$store.commit('addEquipment', this.lastEquipment);
       this.source.add({
         name,
         price: parseFloat(price),
@@ -179,12 +180,11 @@ export default {
       });
       this.clearForm();
     },
-    validateUser() {
+    validateEquipment() {
       this.$v.$touch();
 
-      console.log('this.$v.$invalid', this.$v);
       if (!this.$v.$invalid) {
-        this.saveUser();
+        this.saveEquipment();
       }
     },
   },
