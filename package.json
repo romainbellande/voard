@@ -15,7 +15,8 @@
     "storybook:serve": "vue-cli-service storybook:serve -p 6006 -c config/storybook",
     "test:e2e": "vue-cli-service test:e2e",
     "test:unit": "vue-cli-service test:unit",
-    "ui": "vue ui"
+    "ui": "vue ui",
+    "coverage": "cat ./coverage/lcov.info | coveralls"
   },
   "dependencies": {
     "@mdi/font": "^4.5.95",
@@ -57,6 +58,7 @@
     "babel-loader": "^8.0.6",
     "babel-plugin-module-resolver": "^3.2.0",
     "babel-preset-vue": "^2.0.2",
+    "coveralls": "^3.0.7",
     "css-loader": "^3.2.0",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^6.2.0",

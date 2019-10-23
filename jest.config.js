@@ -21,4 +21,9 @@ module.exports = {
     'jest-watch-typeahead/filename',
     'jest-watch-typeahead/testname',
   ],
+  collectCoverage: true,
+  collectCoverageFrom: ['**/*.{vue}', '!**/node_modules/**', '!<rootDir>/dist/**',
+    '!<rootDir>/src/plugins/**', '!<rootDir>/src/**/*.(test|spec).js',
+  ],
+  coverageReporters: ['lcov', 'text-summary'],
 };
