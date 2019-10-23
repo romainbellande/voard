@@ -14,3 +14,4 @@ install:
 script:
   - yarn lint
   - yarn test:unit
+  - yarn coverage
