@@ -15,6 +15,4 @@ const permissions = {
   },
 };
 
-console.log('permissions', [...Object.values(createPermissions('equipments')), ...Object.values(createPermissions('users')), ...Object.values(createPermissions('roles'))]);
-
 export default permissions;

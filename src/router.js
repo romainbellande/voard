@@ -12,7 +12,6 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      // name: 'dashboard',
       component: Dashboard,
       meta: {
         auth: true,
@@ -21,6 +20,10 @@ const router = new Router({
         {
           path: '/',
           component: Equipments,
+          name: 'home',
+          meta: {
+            auth: true,
+          },
         },
         {
           path: '/roles',
@@ -29,6 +32,10 @@ const router = new Router({
         {
           path: '/users',
           component: () => import(/* webpackChunkName: "users" */ './views/Users.vue'),
+        },
+        {
+          path: '/users/:id',
+          component: () => import(/* webpackChunkName: "users" */ './views/UserEdit.vue'),
         },
       ],
     },

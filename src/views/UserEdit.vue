@@ -1,12 +1,11 @@
 <template>
-  <div>
-    Equipment
-  </div>
+  <div>UserEdit</div>
 </template>
 
 <script>
+export default {
 
-export default {};
+};
 </script>
 
 <style>

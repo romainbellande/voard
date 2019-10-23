@@ -7,12 +7,14 @@ module.exports = {
     '^.+\\.jsx?$': 'babel-jest',
   },
   transformIgnorePatterns: ['/node_modules/'],
+  setupTestFrameworkScriptFile: './jest.setup.js',
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
+    '^vuetify/lib$': 'vuetify',
   },
   snapshotSerializers: ['jest-serializer-vue'],
   testMatch: [
-    '**/tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx)',
+    '**/src/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx)',
   ],
   testURL: 'http://localhost/',
   watchPlugins: [

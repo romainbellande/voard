@@ -79,7 +79,6 @@
 
 <script>
 import firebase from 'firebase';
-import { ma } from 'vuex';
 import { actions, collections } from '@/store';
 
 export default {
@@ -103,6 +102,7 @@ export default {
             const userRef = db.collection(collections.USERS).doc(user.uid);
             this.$store.dispatch(actions.setUserRef, userRef);
             this.reset();
+            this.$router.push('/');
           })
           .catch((error) => {
             // Handle Errors here.
@@ -120,67 +120,6 @@ export default {
       this.$refs.form.resetValidation();
     },
   },
-  // mixins: [validationMixin],
-  // data: () => ({
-  //   form: {
-  //     email: null,
-  //     password: null,
-  //   },
-  //   sending: false,
-  // }),
-  // validations: {
-  //   form: {
-  //     email: {
-  //       required,
-  //       minLength: minLength(3),
-  //     },
-  //     password: {
-  //       required,
-  //     },
-  //   },
-  // },
-  // mounted() {
-  //   // console.log('firebase', firebase.auth());
-  //   // ui.start('#signin', uiConfig);
-  // },
-  // methods: {
-  //   getValidationClass(fieldName) {
-  //     const field = this.$v.form[fieldName];
-
-  //     if (field) {
-  //       return {
-  //         'md-invalid': field.$invalid && field.$dirty,
-  //       };
-  //     }
-  //     return {};
-  //   },
-  // },
-  // signIn() {
-  //   const { email, password } = this.form;
-  // firebase.auth().signInWithEmailAndPassword(email, password)
-  //   .then((test) => {
-  //     console.log('test', test);
-  //   })
-  //   .catch((error) => {
-  //   // Handle Errors here.
-  //     const errorCode = error.code;
-  //     const errorMessage = error.message;
-  //     console.log('errorCode', errorCode);
-  //     console.log('errorMessage', errorMessage);
-  //   });
-  // },
-  // clearForm() {
-  //   this.$v.$reset();
-  //   this.form.email = null;
-  //   this.form.password = null;
-  // },
-  // validateCredentials() {
-  //   this.$v.$touch();
-
-  //   if (!this.$v.$invalid) {
-  //     this.signIn();
-  //   }
-  // },
 };
 </script>
 

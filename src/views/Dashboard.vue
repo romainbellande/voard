@@ -1,5 +1,8 @@
 <template>
-  <v-app id="inspire">
+  <v-app
+    v-if="user"
+    id="inspire"
+  >
     <v-navigation-drawer
       v-model="drawer"
       app
@@ -15,7 +18,7 @@
         </v-list-item>
         <v-list-item to="/roles">
           <v-list-item-action>
-            <v-icon>mdi-contact-mail</v-icon>
+            <v-icon>mdi-shield-account</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Roles</v-list-item-title>
@@ -23,10 +26,58 @@
         </v-list-item>
         <v-list-item to="/users">
           <v-list-item-action>
-            <v-icon>mdi-contact-mail</v-icon>
+            <v-icon>mdi-account-supervisor</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Users</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-action>
+            <v-icon>mdi-calendar-clock</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Events</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-action>
+            <v-icon>mdi-chat</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Chat</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-action>
+            <v-icon>mdi-post</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Blog</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-action>
+            <v-icon>mdi-file-document</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Documents</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-action>
+            <v-icon>mdi-file-document</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Absences</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-action>
+            <v-icon>mdi-file-document</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Pay slips</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -58,9 +109,12 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   data: () => ({
     drawer: null,
   }),
+  computed: mapGetters(['user']),
 };
 </script>

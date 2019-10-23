@@ -18,7 +18,13 @@
       :headers="headers"
       :items="users"
       :search="search"
-    />
+    >
+      <template v-slot:item.authId="{ item }">
+        <router-link :to="'/users/' + item.authId">
+          Edit
+        </router-link>
+      </template>
+    </v-data-table>
   </v-card>
 </template>
 
@@ -44,6 +50,10 @@ export default {
         {
           text: 'Phone',
           value: 'phoneNumber',
+        },
+        {
+          text: 'Actions',
+          value: 'authId',
         },
       ],
     };

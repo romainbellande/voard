@@ -18,9 +18,7 @@ export default {
     selected: [],
     boolean: true,
   }),
-  computed: {
-    ...mapGetters(['roles', 'permissions']),
-  },
+  computed: mapGetters(['roles', 'permissions']),
 };
 </script>
 

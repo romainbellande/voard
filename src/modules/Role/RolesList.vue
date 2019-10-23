@@ -72,9 +72,6 @@ import { collections } from '@/store';
 const db = firebase.firestore();
 
 export default {
-  computed: {
-    ...mapGetters(['roles']),
-  },
   data() {
     return {
       search: '',
@@ -92,11 +89,12 @@ export default {
       ],
     };
   },
+  computed: {
+    ...mapGetters(['roles']),
+  },
   methods: {
     onSelectedRoles(roles) {
       this.selectedRoles = roles;
-      console.log('roles', roles);
-      console.log('roles', roles);
     },
     onRemove() {
       this.selectedRoles.map(item => db.collection(collections.ROLES).doc(item.id).delete());

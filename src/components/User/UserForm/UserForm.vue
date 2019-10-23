@@ -1,0 +1,142 @@
+<template>
+  <div class="root">
+    <v-form
+      ref="form"
+      v-model="valid"
+    >
+      <div class="md-layout md-gutter">
+        <div class="md-layout-item md-small-size-100">
+          <VTextField
+            v-model="form.displayName"
+            data-testid="user-form-displayname"
+            label="displayName"
+            name="displayName"
+            prepend-icon="person"
+            type="text"
+            :rules="rules.displayName"
+          />
+          <VTextField
+            v-model="form.email"
+            data-testid="user-form-email"
+            label="email"
+            name="email"
+            prepend-icon="email"
+            type="text"
+            :rules="rules.email"
+          />
+          <VTextField
+            v-model="form.phoneNumber"
+            data-testid="user-form-phonenumber"
+            label="phoneNumber"
+            name="phoneNumber"
+            prepend-icon="phone"
+            type="text"
+            :rules="rules.phoneNumber"
+          />
+          <VCheckbox
+            v-model="form.disabled"
+            data-testid="user-form-disabled"
+            label="Disabled"
+          />
+        </div>
+      </div>
+      <v-btn
+        data-testid="user-form-submit"
+        color="primary"
+        @click="validateRole"
+      >
+        Submit user
+      </v-btn>
+      <v-snackbar
+        v-model="userSaved"
+      >
+        The user {{ lastUser && lastUser.displayName }} was saved with success!
+      </v-snackbar>
+    </v-form>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    displayName: {
+      type: String,
+      default: '',
+    },
+    phoneNumber: {
+      type: String,
+      default: '',
+    },
+    email: {
+      type: String,
+      default: '',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      valid: false,
+      form: {
+        displayName: this.displayName,
+        phoneNumber: this.phoneNumber,
+        email: this.email,
+        disabled: this.disabled,
+      },
+      rules: {
+        displayName: [
+          value => !!value || 'Display name is required !',
+          value => value.length > 3 || 'Display name must have at least 3 characters',
+        ],
+        phoneNumber: [],
+        email: [
+          value => !!value || 'Email name is required !',
+          value => value.length > 3 || 'Email name must have at least 3 characters',
+        ],
+      },
+      userSaved: false,
+      lastUser: null,
+    };
+  },
+  methods: {
+    getValidationClass(fieldName) {
+      const field = this.$v.form[fieldName];
+
+      if (field) {
+        return {
+          'md-invalid': field.$invalid && field.$dirty,
+        };
+      }
+      return {};
+    },
+    clearForm() {
+      this.$refs.form.reset();
+      Object.keys(this.form).forEach((key) => {
+        this.form[key] = '';
+      });
+    },
+    onSubmit() {
+      this.userSaved = true;
+      this.lastUser = {
+        ...this.form,
+      };
+      this.$emit('submit', this.lastUser);
+      this.clearForm();
+    },
+    validateRole() {
+      if (this.$refs.form.validate()) {
+        this.onSubmit();
+      }
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+  .root {
+    max-width: 300px;
+    padding: 25px 15px;
+  }
+</style>

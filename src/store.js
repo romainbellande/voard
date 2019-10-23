@@ -84,6 +84,9 @@ export default new Vuex.Store({
   },
   mutations: {
     ...vuexfireMutations,
+    setUser(state, payload) {
+      state.user = payload;
+    },
   },
   actions: {
     [actions.setEquipmentsRef]: setEquipmentsRef,
@@ -97,5 +100,6 @@ export default new Vuex.Store({
     permissions: state => state.permissions,
     users: state => state.users,
     equipments: state => state.equipments,
+    user: state => state.user,
   },
 });

@@ -1,37 +1,22 @@
 <template>
   <div>
-    <form
-      novalidate
-      class="md-layout"
-      @submit.prevent="validateRole"
+    <v-form
+      ref="form"
+      v-model="valid"
     >
-      <md-card class="md-layout-item md-size-50 md-small-size-100">
-        <md-card-header>
-          <div class="md-title">
-            Role
-          </div>
-        </md-card-header>
-
-        <md-card-content>
+      <v-card class="md-layout-item md-size-50 md-small-size-100">
+        <v-card-title>Role</v-card-title>
+        <v-card-text>
           <div class="md-layout md-gutter">
             <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('name')">
-                <label for="name">Name</label>
-                <md-input
-                  id="name"
-                  v-model="form.name"
-                  name="name"
-                  :disabled="sending"
-                />
-                <span
-                  v-if="!$v.form.name.required"
-                  class="md-error"
-                >The name is required</span>
-                <span
-                  v-else-if="!$v.form.name.minlength"
-                  class="md-error"
-                >Invalid name</span>
-              </md-field>
+              <v-text-field
+                v-model="form.name"
+                label="name"
+                name="name"
+                prepend-icon="person"
+                type="text"
+                :rules="rules.name"
+              />
               <v-btn
                 large
                 @click="dialog = true"
@@ -53,30 +38,23 @@
               </div>
             </div>
           </div>
-        </md-card-content>
-
-        <md-progress-bar
-          v-if="sending"
-          md-mode="indeterminate"
-        />
-
-        <md-card-actions>
-          <md-button
-            type="submit"
-            class="md-primary"
-            :disabled="sending"
+        </v-card-text>
+        <v-card-actions>
+          <v-btn
+            color="primary"
+            @click="validateRole"
           >
             Submit role
-          </md-button>
-        </md-card-actions>
-      </md-card>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
 
-      <md-snackbar
-        :md-active="roleSaved"
+      <v-snackbar
+        v-model="roleSaved"
       >
         The role {{ lastRole && lastRole.name }} was saved with success!
-      </md-snackbar>
-    </form>
+      </v-snackbar>
+    </v-form>
   </div>
 </template>
 
@@ -101,13 +79,17 @@ export default {
   data: () => ({
     permissions: [],
     selectedPermissions: [],
+    valid: false,
     form: {
-      name: null,
-      price: null,
-      shopLink: null,
+      name: '',
+    },
+    rules: {
+      name: [
+        value => !!value || 'Name is required !',
+        value => value.length > 3 || 'Name must have at least 3 characters',
+      ],
     },
     roleSaved: false,
-    sending: false,
     lastRole: null,
     dialog: false,
   }),
@@ -140,29 +122,22 @@ export default {
     },
     clearForm() {
       this.$v.$reset();
-      this.form.name = null;
+      this.form.name = '';
     },
     saveRole() {
-      this.sending = true;
-
-      // Instead of this timeout, here you can call your API
       this.roleSaved = true;
-      this.sending = false;
       const { name } = this.form;
       this.lastRole = {
         name,
         permissions: this.selectedPermissions.map(item => item.name),
       };
-      console.log('this.lastRole', this.lastRole);
       this.source.add(this.lastRole);
       this.clearForm();
       this.selectedPermissions = [];
       this.permissions = [];
     },
     validateRole() {
-      this.$v.$touch();
-
-      if (!this.$v.$invalid) {
+      if (this.$refs.form.validate()) {
         this.saveRole();
       }
     },
