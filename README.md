@@ -1,4 +1,6 @@
-# admin-dashboard
+[![Build Status](https://travis-ci.org/romainbellande/voard.svg?branch=master)](https://travis-ci.org/romainbellande/voard)[![Coverage Status](https://coveralls.io/repos/github/romainbellande/voard/badge.svg?branch=feat/ci)](https://coveralls.io/github/romainbellande/voard?branch=feat/ci)
+
+# Voard - the admin dashboard
 
 ## Project setup
 ```
