@@ -12,4 +12,5 @@ install:
   - yarn --pure-lockfile
 
 script:
-  - npm run test:unit
+  - yarn lint
+  - yarn test:unit
