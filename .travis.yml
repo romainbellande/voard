@@ -1,0 +1,15 @@
+language: node_js
+
+os:
+  - linux
+
+node_js:
+  - 12
+
+cache: yarn
+
+install:
+  - yarn --pure-lockfile
+
+script:
+  - npm run test:unit

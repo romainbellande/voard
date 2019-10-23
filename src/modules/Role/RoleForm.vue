@@ -28,7 +28,9 @@
                 @add="addPermissions"
               />
               <div class="py-3">
-                <span class="font-weight-black">Permissions ({{ selectedPermissions.length }})</span>
+                <span class="font-weight-black">
+                  Permissions ({{ selectedPermissions.length }})
+                </span>
                 <div class="my-3">
                   <permissions-list
                     :permissions="permissions"
