@@ -5,7 +5,7 @@ import Signin from '.';
 
 afterEach(cleanup);
 
-const renderUserForm = (options = {}) => {
+const renderSignin = (options = {}) => {
   const utils = render(Signin, { ...options, vuetify });
   const getByTestId = item => utils.getByTestId(`signin-${item}`);
   const getSubmitButton = () => getByTestId('submit');
@@ -27,7 +27,7 @@ test('submit form', async () => {
     getEmailInput,
     getPasswordInput,
     getSubmitButton,
-  } = renderUserForm({ props: { onSubmit: onSubmitSpy } });
+  } = renderSignin({ props: { onSubmit: onSubmitSpy } });
   await fireEvent.update(getEmailInput(), 'jdoe@example.com');
   await fireEvent.update(getPasswordInput(), 'jdoe');
   await fireEvent.click(getSubmitButton());
