@@ -19,8 +19,8 @@
       :items="users"
       :search="search"
     >
-      <template v-slot:item.authId="{ item }">
-        <router-link :to="'/users/' + item.authId">
+      <template v-slot:item.uid="{ item }">
+        <router-link :to="'/users/' + item.uid">
           Edit
         </router-link>
       </template>
@@ -29,13 +29,12 @@
 </template>
 
 <script>
-// import firebase from 'firebase';
-import { mapGetters } from 'vuex';
-import { FirestoreManager } from '@/store';
+import userService from '@/services/user.service';
 
 export default {
   data() {
     return {
+      users: [],
       search: '',
       headers: [
         {
@@ -53,7 +52,7 @@ export default {
         },
         {
           text: 'Actions',
-          value: 'authId',
+          value: 'uid',
         },
       ],
     };
@@ -62,11 +61,10 @@ export default {
     loading() {
       return this.users.length === 0;
     },
-    ...mapGetters(['users']),
+    // ...mapGetters(['users']),
   },
-  created() {
-    const firestoreManager = new FirestoreManager(this.$store);
-    firestoreManager.init(['users']);
+  async created() {
+    this.users = await userService.fetchAll();
   },
 };
 </script>

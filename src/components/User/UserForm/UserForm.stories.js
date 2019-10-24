@@ -13,6 +13,6 @@ export default {
 storiesOf('UserForm', module)
   .add('default', () => ({
     components: { UserForm },
-    template: '<user-form @submit="action" display-name="john"></user-form>',
+    template: '<UserForm @submit="action" display-name="john" />',
     methods: { action: action('submit') },
   }), { notes: { markdown } });
