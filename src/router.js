@@ -3,6 +3,7 @@ import Router from 'vue-router';
 
 import Dashboard from './views/Dashboard.vue';
 import Equipments from './views/Equipments.vue';
+import AppLoading from '@/components/AppLoading';
 
 Vue.use(Router);
 
@@ -27,14 +28,18 @@ const router = new Router({
         },
         {
           path: '/roles',
+          name: 'roles',
           component: () => import(/* webpackChunkName: "roles" */ './views/Roles.vue'),
         },
         {
           path: '/users',
+          name: 'users',
           component: () => import(/* webpackChunkName: "users" */ './views/Users.vue'),
+          loading: AppLoading,
         },
         {
           path: '/users/:id',
+          name: 'userEdit',
           component: () => import(/* webpackChunkName: "users" */ './views/UserEdit.vue'),
         },
       ],

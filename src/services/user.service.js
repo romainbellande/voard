@@ -9,4 +9,10 @@ export default {
     const { data } = await firebase.functions().httpsCallable('app/users')();
     return data;
   },
+  fetchDetails(userId) {
+    return firebase.firestore().collection('users')
+      .doc(userId)
+      .get()
+      .then(snapshot => snapshot.data());
+  },
 };

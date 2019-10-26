@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <app-page :loading="loading">
     <UserForm
       v-if="user"
       v-bind="user"
@@ -11,15 +11,14 @@
       @input="onRoleInput"
       @item-selected="onRoleSelected"
     />
-  </div>
+  </app-page>
 </template>
 
 <script>
-import firebase from 'firebase/app';
-
 import UserForm from '@/components/User/UserForm';
 import SelectableItemsList from '@/components/SelectableItemsList';
 import userService from '@/services/user.service';
+import roleService from '@/services/role.service';
 
 export default {
   components: {
@@ -28,6 +27,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       selectedRoles: [],
       roles: [],
       rolesHeaders: [{
@@ -41,8 +41,9 @@ export default {
     };
   },
   async created() {
-    this.roles = await this.fetchRoles();
-    this.userDetails = await this.fetchUserDetails();
+    this.roles = await roleService.fetchAll();
+    this.userDetails = await userService.fetchDetails(this.userId);
+
     const {
       email, disabled, displayName, phoneNumber,
     } = await userService.fetchOne(this.userId);
@@ -50,8 +51,8 @@ export default {
     this.user = {
       email, disabled, displayName, phoneNumber,
     };
+    this.loading = false;
   },
-  // computed: mapGetters(['roles']),
   methods: {
     onSubmit(data) {
       console.log('data', data);
@@ -61,19 +62,6 @@ export default {
     },
     onRoleSelected(role) {
       console.log('role', role);
-    },
-    fetchRoles() {
-      const db = firebase.firestore();
-      return db.collection('roles')
-        .get()
-        .then(querySnapshot => querySnapshot.docs.map(doc => doc.data()));
-    },
-    fetchUserDetails() {
-      const db = firebase.firestore();
-      return db.collection('users')
-        .doc(this.userId)
-        .get()
-        .then(snapshot => snapshot.data());
     },
   },
 };

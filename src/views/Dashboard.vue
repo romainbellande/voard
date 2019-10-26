@@ -95,6 +95,7 @@
     <v-content>
       <v-container
         fluid
+        class="app-container"
       >
         <router-view />
       </v-container>
@@ -118,3 +119,10 @@ export default {
   computed: mapGetters(['user']),
 };
 </script>
+
+<style lang="scss" scoped>
+  .app-container {
+    align-items: start;
+    height: 100%;
+  }
+</style>

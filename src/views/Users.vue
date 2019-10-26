@@ -1,31 +1,33 @@
 <template>
-  <v-card>
-    <v-card-title>
-      Users
-      <div class="flex-grow-1" />
-      <v-text-field
-        v-model="search"
-        append-icon="search"
-        label="Search"
-        single-line
-        hide-details
-      />
-    </v-card-title>
-    <v-data-table
-      :loading="loading"
-      item-key="email"
-      loading-text="Loading... Please wait"
-      :headers="headers"
-      :items="users"
-      :search="search"
-    >
-      <template v-slot:item.uid="{ item }">
-        <router-link :to="'/users/' + item.uid">
-          Edit
-        </router-link>
-      </template>
-    </v-data-table>
-  </v-card>
+  <app-page :loading="loading">
+    <v-card>
+      <v-card-title>
+        Users
+        <div class="flex-grow-1" />
+        <v-text-field
+          v-model="search"
+          append-icon="search"
+          label="Search"
+          single-line
+          hide-details
+        />
+      </v-card-title>
+      <v-data-table
+        :loading="loading"
+        item-key="email"
+        loading-text="Loading... Please wait"
+        :headers="headers"
+        :items="users"
+        :search="search"
+      >
+        <template v-slot:item.uid="{ item }">
+          <router-link :to="'/users/' + item.uid">
+            Edit
+          </router-link>
+        </template>
+      </v-data-table>
+    </v-card>
+  </app-page>
 </template>
 
 <script>
