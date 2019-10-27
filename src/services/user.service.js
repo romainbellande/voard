@@ -15,6 +15,10 @@ export default {
     const { data } = await firebase.functions().httpsCallable(`${adminBaseURL}/${authId}/update`)(body);
     return data;
   },
+  async create(body) {
+    const { data } = await firebase.functions().httpsCallable(`${adminBaseURL}/create`)(body);
+    return data;
+  },
   fetchDetails(authId) {
     return firebase.firestore().collection('users')
       .where('authId', '==', authId)

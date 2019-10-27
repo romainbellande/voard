@@ -40,7 +40,12 @@ const router = new Router({
         {
           path: '/users/:id',
           name: 'userEdit',
-          component: () => import(/* webpackChunkName: "users" */ './views/UserEdit.vue'),
+          component: () => import(/* webpackChunkName: "users-edit" */ './views/UserEdit.vue'),
+        },
+        {
+          path: '/new-user',
+          name: 'newUser',
+          component: () => import(/* webpackChunkName: "new-user" */ './views/NewUser.vue'),
         },
       ],
     },

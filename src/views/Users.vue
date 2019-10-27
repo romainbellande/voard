@@ -67,6 +67,7 @@ export default {
   },
   async created() {
     this.users = await userService.fetchAll();
+    console.log('this.users', this.users);
   },
 };
 </script>
