@@ -12,6 +12,16 @@ const router = new Router({
   base: process.env.BASE_URL,
   routes: [
     {
+      path: '/about',
+      name: 'about',
+      component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import(/* webpackChunkName: "signin" */ './views/Signin.vue'),
+    },
+    {
       path: '/',
       component: Dashboard,
       meta: {
@@ -48,16 +58,6 @@ const router = new Router({
           component: () => import(/* webpackChunkName: "new-user" */ './views/NewUser.vue'),
         },
       ],
-    },
-    {
-      path: '/about',
-      name: 'about',
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: () => import(/* webpackChunkName: "signin" */ './views/Signin.vue'),
     },
   ],
 });

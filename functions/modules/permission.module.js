@@ -8,7 +8,8 @@ const permissions = [
   ...createPermissions('equipments'),
   ...createPermissions('roles'),
   ...createPermissions('users'),
-  ...createPermissions('permissions')
+  ...createPermissions('permissions'),
+  ...createPermissions('admin')
 ];
 
 const router = express.Router();

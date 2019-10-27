@@ -20,6 +20,9 @@
         :items="users"
         :search="search"
       >
+        <template v-slot:item.emailVerified="{ item }">
+          {{ item.emailVerified ? 'Yes' : 'No' }}
+        </template>
         <template v-slot:item.uid="{ item }">
           <router-link :to="'/users/' + item.uid">
             Edit
@@ -53,6 +56,10 @@ export default {
           value: 'phoneNumber',
         },
         {
+          text: 'Email verified',
+          value: 'emailVerified',
+        },
+        {
           text: 'Actions',
           value: 'uid',
         },
@@ -67,7 +74,6 @@ export default {
   },
   async created() {
     this.users = await userService.fetchAll();
-    console.log('this.users', this.users);
   },
 };
 </script>

@@ -5,11 +5,15 @@ import UserIdentityForm from '.';
 
 afterEach(cleanup);
 
-const props = {
+const submitData = {
   displayName: 'jdoe',
   phoneNumber: '+33612312312',
   email: 'jdoe@example.com',
   disabled: true,
+};
+
+const props = {
+  ...submitData,
   editMode: true,
 };
 
@@ -60,7 +64,7 @@ test('submit form values', async () => {
 
   await fireEvent.click(submitButton);
   expect(emitted()).toHaveProperty('submit');
-  expect(emitted().submit[0][0]).toMatchObject(props);
+  expect(emitted().submit[0][0]).toMatchObject(submitData);
 });
 
 // test('display displayName error when the value is invalid', () => {

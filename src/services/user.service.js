@@ -19,14 +19,11 @@ export default {
     const { data } = await firebase.functions().httpsCallable(`${adminBaseURL}/create`)(body);
     return data;
   },
-  fetchDetails(authId) {
+  fetchDetails(userId) {
     return firebase.firestore().collection('users')
-      .where('authId', '==', authId)
+      .doc(userId)
       .get()
-      .then((snapshot) => {
-        const document = snapshot.docs[0];
-        return { ...document.data(), id: document.id };
-      });
+      .then(snapshot => ({ ...snapshot.data(), id: document.id }));
   },
   async updateDetails(userId, body) {
     return firebase.firestore().collection('users')

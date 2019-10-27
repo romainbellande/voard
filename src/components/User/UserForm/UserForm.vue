@@ -17,6 +17,7 @@
     <v-simple-table
       fixed-header
       height="300px"
+      data-testid="permissions-table"
     >
       <template v-slot:default>
         <thead>

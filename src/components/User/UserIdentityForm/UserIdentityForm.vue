@@ -108,7 +108,7 @@ export default {
         displayName: this.displayName,
         phoneNumber: this.phoneNumber,
         email: this.email,
-        ...(this.editMode ? { disabled: this.disabled } : { password: '' }),
+        ...this.editMode ? { disabled: this.disabled } : { password: '' },
       },
       rules: {
         displayName: [
