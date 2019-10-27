@@ -8,7 +8,7 @@
       app
     >
       <v-list dense>
-        <v-list-item to="/">
+        <v-list-item :to="{ name: 'home' }">
           <v-list-item-action>
             <v-icon>mdi-home</v-icon>
           </v-list-item-action>
@@ -16,7 +16,7 @@
             <v-list-item-title>Home</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item to="/roles">
+        <v-list-item :to="{ name: 'roles' }">
           <v-list-item-action>
             <v-icon>mdi-shield-account</v-icon>
           </v-list-item-action>
@@ -24,7 +24,7 @@
             <v-list-item-title>Roles</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item to="/users">
+        <v-list-item :to="{ name: 'users' }">
           <v-list-item-action>
             <v-icon>mdi-account-supervisor</v-icon>
           </v-list-item-action>

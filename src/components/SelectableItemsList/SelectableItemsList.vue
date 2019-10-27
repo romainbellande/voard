@@ -16,6 +16,7 @@
       show-select
       :search="search"
       class="elevation-1"
+      :value="[{ name: 'SUPER_ADMIN' }]"
       @item-selected="onItemSelected"
       @input="onInput"
     />
@@ -25,6 +26,10 @@
 <script>
 export default {
   props: {
+    value: {
+      type: Array,
+      default: () => [],
+    },
     items: {
       type: Array,
       default: () => [],
@@ -37,6 +42,10 @@ export default {
           .reduce((prev, current) => prev && current, true);
       },
     },
+    selectedItems: {
+      type: Array,
+      default: () => [],
+    },
     defaultKey: {
       type: String,
       default: null,
@@ -45,7 +54,7 @@ export default {
   data() {
     return {
       search: '',
-      selected: [],
+      selected: this.selectedItems,
     };
   },
   computed: {

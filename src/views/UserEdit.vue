@@ -1,20 +1,58 @@
 <template>
-  <app-page :loading="loading">
-    <UserForm
-      v-if="user"
-      v-bind="user"
-      @submit="onSubmit"
-    />
-    <SelectableItemsList
-      :headers="rolesHeaders"
-      :items="roles"
-      @input="onRoleInput"
-      @item-selected="onRoleSelected"
-    />
+  <app-page
+    :loading="loading"
+    parent-route="users"
+  >
+    <div class="d-flex flex-wrap flex-row justify-space-around">
+      <UserForm
+        v-if="user"
+        v-bind="user"
+        :saved="saved"
+        @submit="onSubmit"
+      />
+      <div>
+        <SelectableItemsList
+          :selected-items="userDetails.roles"
+          :headers="rolesHeaders"
+          :items="roles"
+          @input="onRoleInput"
+        />
+        <v-btn
+          data-testid="user-edit-submit"
+          color="primary"
+          @click="updateRoles"
+        >
+          Update roles
+        </v-btn>
+      </div>
+    </div>
+    <v-simple-table
+      fixed-header
+      height="300px"
+    >
+      <template v-slot:default>
+        <thead>
+          <tr>
+            <th class="text-left">
+              Permission
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="item in permissions"
+            :key="item"
+          >
+            <td>{{ item }}</td>
+          </tr>
+        </tbody>
+      </template>
+    </v-simple-table>
   </app-page>
 </template>
 
 <script>
+import uniq from 'lodash/uniq';
 import UserForm from '@/components/User/UserForm';
 import SelectableItemsList from '@/components/SelectableItemsList';
 import userService from '@/services/user.service';
@@ -27,6 +65,7 @@ export default {
   },
   data() {
     return {
+      saved: false,
       loading: true,
       selectedRoles: [],
       roles: [],
@@ -39,6 +78,12 @@ export default {
       userDetails: {},
       user: null,
     };
+  },
+  computed: {
+    permissions() {
+      return uniq(this.userDetails.roles.map(role => role.permissions)
+        .reduce((prev, current) => [...prev, ...current], []));
+    },
   },
   async created() {
     this.roles = await roleService.fetchAll();
@@ -54,14 +99,25 @@ export default {
     this.loading = false;
   },
   methods: {
-    onSubmit(data) {
-      console.log('data', data);
+    async onSubmit(data) {
+      await userService.update(this.userId, data);
+      this.saved = true;
     },
-    onRoleInput(role) {
-      console.log('role', role);
+    onRoleInput(roles) {
+      this.selectedRoles = roles;
     },
-    onRoleSelected(role) {
-      console.log('role', role);
+    async updateRoles() {
+      const permissions = uniq(this.selectedRoles.map(role => role.permissions)
+        .reduce((prev, current) => [...prev, ...current], []));
+      try {
+        await userService.updateDetails(this.userId, {
+          roles: this.selectedRoles,
+          permissions,
+        });
+        this.userDetails.roles = this.selectedRoles;
+      } catch (error) {
+        // TODO: error message
+      }
     },
   },
 };

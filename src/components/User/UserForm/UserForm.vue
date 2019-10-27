@@ -48,7 +48,7 @@
         Submit user
       </v-btn>
       <v-snackbar
-        v-model="userSaved"
+        v-model="saved"
       >
         The user {{ lastUser && lastUser.displayName }} was saved with success!
       </v-snackbar>
@@ -57,6 +57,8 @@
 </template>
 
 <script>
+import cleanObject from '@/common/helpers/clean-object';
+
 export default {
   props: {
     displayName: {
@@ -72,6 +74,14 @@ export default {
       default: '',
     },
     disabled: {
+      type: Boolean,
+      default: false,
+    },
+    reset: {
+      type: Boolean,
+      default: false,
+    },
+    saved: {
       type: Boolean,
       default: false,
     },
@@ -96,7 +106,6 @@ export default {
           value => value.length > 3 || 'Email name must have at least 3 characters',
         ],
       },
-      userSaved: false,
       lastUser: null,
     };
   },
@@ -118,12 +127,11 @@ export default {
       });
     },
     onSubmit() {
-      this.userSaved = true;
-      this.lastUser = {
-        ...this.form,
-      };
+      this.lastUser = cleanObject(this.form);
       this.$emit('submit', this.lastUser);
-      this.clearForm();
+      if (this.reset) {
+        this.clearForm();
+      }
     },
     validateRole() {
       if (this.$refs.form.validate()) {
@@ -136,7 +144,7 @@ export default {
 
 <style lang="scss" scoped>
   .root {
-    max-width: 300px;
+    max-width: 500px;
     padding: 25px 15px;
   }
 </style>
