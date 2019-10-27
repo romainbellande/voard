@@ -8,7 +8,7 @@
       app
     >
       <v-list dense>
-        <v-list-item to="/">
+        <v-list-item :to="{ name: 'home' }">
           <v-list-item-action>
             <v-icon>mdi-home</v-icon>
           </v-list-item-action>
@@ -16,7 +16,7 @@
             <v-list-item-title>Home</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item to="/roles">
+        <v-list-item :to="{ name: 'roles' }">
           <v-list-item-action>
             <v-icon>mdi-shield-account</v-icon>
           </v-list-item-action>
@@ -24,14 +24,29 @@
             <v-list-item-title>Roles</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item to="/users">
-          <v-list-item-action>
-            <v-icon>mdi-account-supervisor</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
+        <v-list-group
+          prepend-icon="account_circle"
+        >
+          <template v-slot:activator>
             <v-list-item-title>Users</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+          </template>
+          <v-list-item :to="{ name: 'users' }">
+            <v-list-item-action>
+              <v-icon>supervised_user_circle</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>Manage users</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item :to="{ name: 'newUser' }">
+            <v-list-item-action>
+              <v-icon>person_add</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>New User</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-group>
         <v-list-item>
           <v-list-item-action>
             <v-icon>mdi-calendar-clock</v-icon>
@@ -95,6 +110,7 @@
     <v-content>
       <v-container
         fluid
+        class="app-container"
       >
         <router-view />
       </v-container>
@@ -118,3 +134,10 @@ export default {
   computed: mapGetters(['user']),
 };
 </script>
+
+<style lang="scss" scoped>
+  .app-container {
+    align-items: start;
+    height: 100%;
+  }
+</style>

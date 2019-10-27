@@ -17,6 +17,16 @@ yarn run serve
 yarn run build
 ```
 
+### Run firebase emulators
+```
+yarn fb:emulate
+```
+
+### Run storbook
+```
+yarn storybook:serve
+```
+
 ### Run your tests
 ```
 yarn run test

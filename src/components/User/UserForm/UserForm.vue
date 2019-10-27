@@ -1,142 +1,108 @@
 <template>
-  <div class="root">
-    <v-form
-      ref="form"
-      v-model="valid"
+  <div>
+    <div class="d-flex flex-wrap flex-row justify-space-around">
+      <UserIdentityForm
+        :edit-mode="editMode"
+        v-bind="user"
+        :saved="saved"
+        @submit="onUserIdentitySubmit"
+      />
+      <SelectableItemsList
+        :selected-items="defaultSelectedRoles"
+        :headers="rolesHeaders"
+        :items="roles"
+        @input="onRoleInput"
+      />
+    </div>
+    <v-simple-table
+      fixed-header
+      height="300px"
+      data-testid="permissions-table"
     >
-      <div class="md-layout md-gutter">
-        <div class="md-layout-item md-small-size-100">
-          <VTextField
-            v-model="form.displayName"
-            data-testid="user-form-displayname"
-            label="displayName"
-            name="displayName"
-            prepend-icon="person"
-            type="text"
-            :rules="rules.displayName"
-          />
-          <VTextField
-            v-model="form.email"
-            data-testid="user-form-email"
-            label="email"
-            name="email"
-            prepend-icon="email"
-            type="text"
-            :rules="rules.email"
-          />
-          <VTextField
-            v-model="form.phoneNumber"
-            data-testid="user-form-phonenumber"
-            label="phoneNumber"
-            name="phoneNumber"
-            prepend-icon="phone"
-            type="text"
-            :rules="rules.phoneNumber"
-          />
-          <VCheckbox
-            v-model="form.disabled"
-            data-testid="user-form-disabled"
-            label="Disabled"
-          />
-        </div>
-      </div>
-      <v-btn
-        data-testid="user-form-submit"
-        color="primary"
-        @click="validateRole"
-      >
-        Submit user
-      </v-btn>
-      <v-snackbar
-        v-model="userSaved"
-      >
-        The user {{ lastUser && lastUser.displayName }} was saved with success!
-      </v-snackbar>
-    </v-form>
+      <template v-slot:default>
+        <thead>
+          <tr>
+            <th class="text-left">
+              Permission
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="item in permissions"
+            :key="item"
+          >
+            <td>{{ item }}</td>
+          </tr>
+        </tbody>
+      </template>
+    </v-simple-table>
   </div>
 </template>
 
 <script>
+import uniq from 'lodash/uniq';
+import UserIdentityForm from '@/components/User/UserIdentityForm';
+import SelectableItemsList from '@/components/SelectableItemsList';
+
 export default {
+  components: {
+    UserIdentityForm,
+    SelectableItemsList,
+  },
   props: {
-    displayName: {
-      type: String,
-      default: '',
+    user: {
+      type: Object,
+      default: null,
     },
-    phoneNumber: {
-      type: String,
-      default: '',
-    },
-    email: {
-      type: String,
-      default: '',
-    },
-    disabled: {
+    loading: {
       type: Boolean,
       default: false,
+    },
+    editMode: {
+      type: Boolean,
+      default: false,
+    },
+    saved: {
+      type: Boolean,
+      default: false,
+    },
+    defaultSelectedRoles: {
+      type: Array,
+      default: () => [],
+    },
+    roles: {
+      type: Array,
+      default: () => [],
     },
   },
   data() {
     return {
-      valid: false,
-      form: {
-        displayName: this.displayName,
-        phoneNumber: this.phoneNumber,
-        email: this.email,
-        disabled: this.disabled,
-      },
-      rules: {
-        displayName: [
-          value => !!value || 'Display name is required !',
-          value => value.length > 3 || 'Display name must have at least 3 characters',
-        ],
-        phoneNumber: [],
-        email: [
-          value => !!value || 'Email name is required !',
-          value => value.length > 3 || 'Email name must have at least 3 characters',
-        ],
-      },
-      userSaved: false,
-      lastUser: null,
+      selectedRoles: this.defaultSelectedRoles,
+      rolesHeaders: [{
+        text: 'Name',
+        align: 'left',
+        value: 'name',
+      }],
     };
   },
+  computed: {
+    permissions() {
+      return uniq(this.selectedRoles.map(role => role.permissions)
+        .reduce((prev, current) => [...prev, ...current], []));
+    },
+  },
   methods: {
-    getValidationClass(fieldName) {
-      const field = this.$v.form[fieldName];
-
-      if (field) {
-        return {
-          'md-invalid': field.$invalid && field.$dirty,
-        };
-      }
-      return {};
+    onRoleInput(roles) {
+      this.selectedRoles = roles;
     },
-    clearForm() {
-      this.$refs.form.reset();
-      Object.keys(this.form).forEach((key) => {
-        this.form[key] = '';
-      });
-    },
-    onSubmit() {
-      this.userSaved = true;
-      this.lastUser = {
-        ...this.form,
-      };
-      this.$emit('submit', this.lastUser);
-      this.clearForm();
-    },
-    validateRole() {
-      if (this.$refs.form.validate()) {
-        this.onSubmit();
-      }
+    onUserIdentitySubmit(data) {
+      this.$emit('submit', { user: data, roles: this.selectedRoles });
     },
   },
 };
 </script>
 
-<style lang="scss" scoped>
-  .root {
-    max-width: 300px;
-    padding: 25px 15px;
-  }
+<style>
+
 </style>

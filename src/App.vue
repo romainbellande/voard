@@ -29,12 +29,12 @@ export default {
 
     firebase.auth().onAuthStateChanged((user) => {
       this.$store.commit('setUser', user);
-      if (user && this.$router.path === '/login') {
+      if (user && this.$router.name === 'login') {
         // User is signed in.
-        this.$router.push('/');
-      } else if (!user && this.$router.path !== '/login') {
+        this.$router.push({ name: 'home' });
+      } else if (!user && this.$router.name !== 'login') {
         // No user is signed in.
-        this.$router.push('/login');
+        this.$router.push({ name: 'login' });
       }
     });
   },

@@ -9,36 +9,24 @@ service cloud.firestore {
       return request.auth.uid == resource.data.userId;
     }
 
-    match /{document=**} {
-      allow read, write: if signedInOrPublic();
+    function isAllowed(permission) {
+      return request.auth.uid != null && permission in get(/databases/$(database)/documents/users/$(request.auth.uid)).data.permissions;
     }
 
-    match /equipments {
-      allow read, write: if signedInOrPublic();
-
-      match /{equipment} {
-        allow read: if isOwner();
-        allow write: if signedInOrPublic();
-      }
+    match /roles/{role} {
+      allow get: if isAllowed('documents.roles.get');
+      allow list: if isAllowed('documents.roles.list');
+      allow update: if isAllowed('documents.roles.update');
+      allow create: if isAllowed('documents.roles.create');
+      allow delete: if isAllowed('documents.roles.delete');
     }
 
-    match /roles {
-      allow read: if true
-      allow write: if false
-    }
-
-    match /permissions {
-      allow read: if true
-      allow write: if false
-    }
-
-    match /users {
-      allow read, write: if signedInOrPublic();
-
-      match /{user} {
-        allow read: if isOwner();
-        allow write: if signedInOrPublic();
-      }
+    match /users/{user} {
+      allow get: if isAllowed('documents.users.get');
+      allow list: if isAllowed('documents.users.list');
+      allow update: if isAllowed('documents.users.update');
+      allow create: if isAllowed('documents.users.create');
+      allow delete: if isAllowed('documents.users.delete');
     }
   }
 }
