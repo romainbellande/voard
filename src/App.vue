@@ -20,7 +20,6 @@ export default {
 
             });
           } else {
-            this.$store.commit('setUser', user);
             next();
           }
         });
@@ -29,6 +28,8 @@ export default {
 
     firebase.auth().onAuthStateChanged((user) => {
       this.$store.commit('setUser', user);
+      this.$store.dispatch('bindUserDetails', user.uid);
+
       if (user && this.$router.name === 'login') {
         // User is signed in.
         this.$router.push({ name: 'home' });

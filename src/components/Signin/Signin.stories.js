@@ -5,11 +5,6 @@ import { action } from '@storybook/addon-actions';
 import Signin from '.';
 import markdown from './Signin.md';
 
-export default {
-  title: 'Signin',
-};
-
-
 storiesOf('Signin', module)
   .add('default', () => ({
     components: { Signin },

@@ -3,6 +3,9 @@ import Vuex from 'vuex';
 import { vuexfireMutations, firestoreAction } from 'vuexfire';
 import firebase from 'firebase';
 
+import permissionService from '@/services/permission.service';
+
+
 Vue.use(Vuex);
 
 export const collections = {
@@ -13,12 +16,12 @@ export const collections = {
   PERMISSIONS: 'permissions',
 };
 
-const createAction = actionName => firestoreAction(
-  (context, ref) => {
-    // this will unbind any previously bound ref to 'todos'
-    context.bindFirestoreRef(actionName, ref);
-  },
-);
+const createAction = (ref) => {
+  const db = firebase.firestore();
+  return firestoreAction(
+    ({ bindFirestoreRef }) => bindFirestoreRef(ref, db.collection(ref)),
+  );
+};
 
 
 const setEquipmentsRef = createAction(collections.EQUIPMENTS);
@@ -81,14 +84,24 @@ export default new Vuex.Store({
     equipments: [],
     users: [],
     user: null,
+    userDetails: null,
   },
   mutations: {
     ...vuexfireMutations,
     setUser(state, payload) {
       state.user = payload;
     },
+    setPermissions(state, payload = []) {
+      state.permissions = payload;
+    },
   },
   actions: {
+    bindRoles: createAction('roles'),
+    bindUserDetails: firestoreAction(({ bindFirestoreRef }, userId) => bindFirestoreRef('userDetails', firebase.firestore().collection('users').doc(userId))),
+    fetchPermissions: async ({ commit }) => {
+      const { data } = await permissionService.fetchAll();
+      commit('setPermissions', data);
+    },
     [actions.setEquipmentsRef]: setEquipmentsRef,
     [actions.setUserRef]: setUserRef,
     [actions.setRolesRef]: setRolesRef,

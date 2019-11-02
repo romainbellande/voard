@@ -22,7 +22,7 @@ service cloud.firestore {
     }
 
     match /users/{user} {
-      allow get: if isAllowed('documents.users.get');
+      allow get: if isAllowed('documents.users.get') || request.auth.uid === user;
       allow list: if isAllowed('documents.users.list');
       allow update: if isAllowed('documents.users.update');
       allow create: if isAllowed('documents.users.create');
