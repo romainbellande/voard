@@ -1,5 +1,4 @@
 import { render, cleanup, fireEvent } from '@testing-library/vue';
-import '@testing-library/jest-dom/extend-expect';
 import vuetify from '@/plugins/vuetify';
 import SelectableItemsList from '.';
 
@@ -55,6 +54,7 @@ test('insert items in list', () => {
   const orangeCell = getByText('orange');
   const appleCell = getByText('apple');
   const peachCell = getByText('peach');
+
   expect(orangeCell).toBeVisible();
   expect(appleCell).toBeVisible();
   expect(peachCell).toBeVisible();

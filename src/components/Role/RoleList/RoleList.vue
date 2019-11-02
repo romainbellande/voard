@@ -13,7 +13,7 @@
     </v-card-title>
     <v-data-table
       :headers="headers"
-      :items="roles"
+      :items="items"
       :search="search"
       :single-select="false"
       show-select
@@ -65,13 +65,16 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import firebase from 'firebase';
-import { collections } from '@/store';
-
-const db = firebase.firestore();
-
 export default {
+  props: {
+    /**
+     * user roles
+     */
+    items: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data() {
     return {
       search: '',
@@ -89,20 +92,20 @@ export default {
       ],
     };
   },
-  computed: {
-    ...mapGetters(['roles']),
-  },
   methods: {
     onSelectedRoles(roles) {
       this.selectedRoles = roles;
     },
     onRemove() {
-      this.selectedRoles.map(item => db.collection(collections.ROLES).doc(item.id).delete());
+      /**
+       *  event emitted regarding all selected roles we want to remove
+       *
+       * @event remove
+       * @type {object}
+       * @property {object} [{ name: 'SUPER_ADMIN', permissions: ['documents.users.get'] }]
+       */
+      this.$emit('remove', this.selectedRoles);
     },
   },
 };
 </script>
-
-<style>
-
-</style>

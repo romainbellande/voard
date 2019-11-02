@@ -2,14 +2,13 @@
   <div>
     <v-form
       ref="form"
-      v-model="valid"
     >
       <v-card class="md-layout-item md-size-50 md-small-size-100">
         <v-card-title>Role</v-card-title>
         <v-card-text>
           <div class="md-layout md-gutter">
             <div class="md-layout-item md-small-size-100">
-              <v-text-field
+              <VTextField
                 v-model="form.name"
                 label="name"
                 name="name"
@@ -19,21 +18,36 @@
               />
               <v-btn
                 large
+                data-testid="add-permission-button"
                 @click="dialog = true"
               >
                 Add permissions
               </v-btn>
-              <permissions-dialog
+              <add-dialog
                 v-model="dialog"
+                title="Manage permissions"
+                description="Select the permissions you want to add."
                 @add="addPermissions"
-              />
-              <div class="py-3">
+              >
+                <PermissionList
+                  :items="allPermissions"
+                  @input="onAddedPermissionsInput"
+                />
+              </add-dialog>
+              <div
+                class="py-3"
+                data-testid="role-permissions"
+              >
                 <span class="font-weight-black">
                   Permissions ({{ selectedPermissions.length }})
                 </span>
-                <div class="my-3">
-                  <permissions-list
-                    :permissions="permissions"
+                <div
+                  v-if="selectedPermissions.length"
+                  class="my-3"
+                >
+                  <PermissionList
+                    :items="permissions"
+                    :selected-items="permissions"
                     @input="onSelectedPermissionsInput"
                   />
                 </div>
@@ -43,6 +57,7 @@
         </v-card-text>
         <v-card-actions>
           <v-btn
+            data-testid="submit-role-button"
             color="primary"
             @click="validateRole"
           >
@@ -61,27 +76,24 @@
 </template>
 
 <script>
-import { validationMixin } from 'vuelidate';
-import {
-  required,
-  minLength,
-} from 'vuelidate/lib/validators';
-import firebase from 'firebase';
-
-import { collections, actions } from '@/store';
-import PermissionsDialog from './PermissionsDialog.vue';
-import PermissionsList from './PermissionsList.vue';
+import AddDialog from '@/components/AddDialog';
+import PermissionList from '@/components/Permission/PermissionList';
 
 export default {
   components: {
-    PermissionsDialog,
-    PermissionsList,
+    AddDialog,
+    PermissionList,
   },
-  mixins: [validationMixin],
+  props: {
+    allPermissions: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data: () => ({
     permissions: [],
     selectedPermissions: [],
-    valid: false,
+    addedPermissions: [],
     form: {
       name: '',
     },
@@ -95,19 +107,6 @@ export default {
     lastRole: null,
     dialog: false,
   }),
-  created() {
-    const db = firebase.firestore();
-    this.source = db.collection(collections.ROLES);
-    this.$store.dispatch(actions.setRolesRef, this.source);
-  },
-  validations: {
-    form: {
-      name: {
-        required,
-        minLength: minLength(3),
-      },
-    },
-  },
   methods: {
     closeDialog() {
       this.dialog = false;
@@ -123,7 +122,7 @@ export default {
       return {};
     },
     clearForm() {
-      this.$v.$reset();
+      this.$refs.form.reset();
       this.form.name = '';
     },
     saveRole() {
@@ -131,9 +130,9 @@ export default {
       const { name } = this.form;
       this.lastRole = {
         name,
-        permissions: this.selectedPermissions.map(item => item.name),
+        permissions: this.selectedPermissions,
       };
-      this.source.add(this.lastRole);
+      this.$emit('submit', this.lastRole);
       this.clearForm();
       this.selectedPermissions = [];
       this.permissions = [];
@@ -143,8 +142,13 @@ export default {
         this.saveRole();
       }
     },
-    addPermissions(permissions) {
-      this.permissions = permissions;
+    addPermissions() {
+      this.permissions = this.addedPermissions;
+      this.selectedPermissions = this.addedPermissions;
+      this.dialog = false;
+    },
+    onAddedPermissionsInput(permissions) {
+      this.addedPermissions = permissions;
     },
     onSelectedPermissionsInput(permissions) {
       this.selectedPermissions = permissions;

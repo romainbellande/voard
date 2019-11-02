@@ -6,7 +6,7 @@ module.exports = {
       'jest-transform-stub',
     '^.+\\.jsx?$': 'babel-jest',
   },
-  transformIgnorePatterns: ['/node_modules/'],
+  transformIgnorePatterns: ['<rootDir>/node_modules/'],
   setupTestFrameworkScriptFile: './jest.setup.js',
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',

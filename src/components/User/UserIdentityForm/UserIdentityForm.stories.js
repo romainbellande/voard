@@ -5,11 +5,6 @@ import { action } from '@storybook/addon-actions';
 import UserIdentityForm from '.';
 import markdown from './UserIdentityForm.md';
 
-export default {
-  title: 'UserIdentityForm',
-};
-
-
 storiesOf('UserIdentityForm', module)
   .add('default', () => ({
     components: { UserIdentityForm },

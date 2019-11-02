@@ -1,7 +1,7 @@
 import { render, cleanup } from '@testing-library/vue';
-import '@testing-library/jest-dom/extend-expect';
 import vuetify from '@/plugins/vuetify';
 import AppPage from '.';
+
 
 afterEach(cleanup);
 

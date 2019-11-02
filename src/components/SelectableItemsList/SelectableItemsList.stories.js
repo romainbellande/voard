@@ -46,4 +46,17 @@ storiesOf('SelectableItemsList', module)
       onItemSelected: action('on item selected'),
       onInput: action('on input'),
     },
+  }), { notes: { markdown } })
+  .add('with default selection', () => ({
+    components: { SelectableItemsList },
+    template: '<SelectableItemsList :headers="headers" :items="items" :selected-items="[items[0]]" @input="onInput" />',
+    data() {
+      return {
+        items,
+        headers,
+      };
+    },
+    methods: {
+      onInput: action('on input'),
+    },
   }), { notes: { markdown } });
